@@ -1,6 +1,6 @@
 export interface Merchant {
   id: number;
-  storeName?: string;
+  storeName: string | null;
   storeDescription: string | null;
-  url?: string;
+  storeUrl: string | null;
 }

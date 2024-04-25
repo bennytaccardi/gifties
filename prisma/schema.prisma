@@ -2,7 +2,7 @@ model Merchant {
   id    Int     @id @default(autoincrement())
   storeDescription String?
   storeName String?
-  url String?
+  storeUrl String?
 }
 
 generator client {

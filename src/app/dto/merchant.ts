@@ -1,5 +1,5 @@
 export interface MerchantInfo {
-  storeName: string;
-  storeDescription: string;
-  url: string;
+  storeName?: string;
+  storeDescription?: string;
+  storeUrl?: string;
 }

@@ -14,6 +14,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { MerchantInfo } from "../dto/merchant";
+import axios from "axios";
 
 const formSchema = z.object({
   storeName: z.string().min(2).max(50),
@@ -28,8 +30,20 @@ export function StoreForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const merchantInfo: MerchantInfo = {
+      storeName: values.storeName,
+      storeDescription: values.storeDescription,
+      storeUrl: values.storeUrl,
+    };
+    const response = await axios.post(
+      "http://localhost:3000/api/merchant/saveMerchant/",
+      {
+        merchant: merchantInfo,
+      }
+    );
+
+    console.log(response);
   }
   return (
     <Form {...form}>
