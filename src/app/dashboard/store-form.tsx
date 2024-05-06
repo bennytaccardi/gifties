@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MerchantInfo } from "../dto/merchant";
 import axios from "axios";
+import { saveInfo } from "../services/merchant/merchant";
 
 const formSchema = z.object({
   storeName: z.string().min(2).max(50),
@@ -37,7 +37,7 @@ export function StoreForm() {
       storeUrl: values.storeUrl,
     };
     const response = await axios.post(
-      "http://localhost:3000/api/merchant/saveMerchant/",
+      `${process.env.SERVER_URL}${process.env.SAVE_MERCHANT_PATH}`,
       {
         merchant: merchantInfo,
       }
