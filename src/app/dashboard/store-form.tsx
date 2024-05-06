@@ -36,8 +36,11 @@ export function StoreForm() {
       storeDescription: values.storeDescription,
       storeUrl: values.storeUrl,
     };
+    console.log(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`
+    );
     const response = await axios.post(
-      `${process.env.SERVER_URL}${process.env.SAVE_MERCHANT_PATH}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`,
       {
         merchant: merchantInfo,
       }
