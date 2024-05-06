@@ -14,8 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { MerchantInfo } from "../dto/merchant";
-import axios from "axios";
-import { saveInfo } from "../services/merchant/merchant";
 
 const formSchema = z.object({
   storeName: z.string().min(2).max(50),
@@ -39,10 +37,16 @@ export function StoreForm() {
     console.log(
       `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`
     );
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`,
+    const response = await fetch(
+      `${process.env.SERVER_URL}${process.env.SAVE_MERCHANT_PATH}`,
       {
-        merchant: merchantInfo,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          merchant: merchantInfo,
+        }),
       }
     );
 
