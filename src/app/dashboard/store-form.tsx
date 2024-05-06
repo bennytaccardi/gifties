@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { MerchantInfo } from "../dto/merchant";
+import { UploadButton } from "@/utils/uploadthing";
 
 const formSchema = z.object({
   storeName: z.string().min(2).max(50),
@@ -101,7 +102,17 @@ export function StoreForm() {
             <FormItem>
               <FormLabel>Store Name</FormLabel>
               <FormControl>
-                <Input type="file" accept="image/png,image/jpeg" {...field} />
+                <UploadButton
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res) => {
+                    // Do something with the response
+                    console.log("Files: ", res);
+                  }}
+                  onUploadError={(error: Error) => {
+                    // Do something with the error.
+                    alert(`ERROR! ${error.message}`);
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
