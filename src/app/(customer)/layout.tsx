@@ -10,7 +10,7 @@ export default function CustomerLayout({
     <>
       <header className="p-2 flex">
         <Button asChild className="ml-auto">
-          <Link href="/dashboard">Sei un business? Clicca qui</Link>
+          <Link href="/dashboard">Sei un business? Clicca qui!</Link>
         </Button>
       </header>
       {children}

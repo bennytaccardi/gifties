@@ -1,7 +1,6 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -14,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { MerchantInfo } from "../dto/merchant";
 
 const formSchema = z.object({
   storeName: z.string().min(2).max(50),
@@ -28,10 +28,29 @@ export function StoreForm() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const merchantInfo: MerchantInfo = {
+      storeName: values.storeName,
+      storeDescription: values.storeDescription,
+      storeUrl: values.storeUrl,
+    };
+    console.log(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`
+    );
+    const response = await fetch(
+      `${process.env.SERVER_URL}${process.env.SAVE_MERCHANT_PATH}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          merchant: merchantInfo,
+        }),
+      }
+    );
+
+    console.log(response);
   }
   return (
     <Form {...form}>
