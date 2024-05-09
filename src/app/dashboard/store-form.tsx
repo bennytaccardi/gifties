@@ -27,7 +27,6 @@ const formSchema = z.object({
 });
 
 export function StoreForm() {
-  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
 
   const form = useForm<z.infer<typeof formSchema>>({
