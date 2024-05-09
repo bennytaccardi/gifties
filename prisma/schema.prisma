@@ -1,8 +1,8 @@
 model Merchant {
-  id    String     @id
-  description String?
-  name String?
-  url String?
+  id           String  @id
+  description  String?
+  name         String?
+  url          String?
   profileImage String?
 }
 
