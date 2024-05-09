@@ -1,8 +1,9 @@
 model Merchant {
   id    String     @id
-  storeDescription String?
-  storeName String?
-  storeUrl String?
+  description String?
+  name String?
+  url String?
+  profileImage String?
 }
 
 generator client {

@@ -15,15 +15,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { MerchantInfo } from "../dto/merchant";
 import { UploadButton } from "@/utils/uploadthing";
+import { useState } from "react";
 
 const formSchema = z.object({
-  storeName: z.string().min(2).max(50),
-  storeUrl: z.string().url().optional(),
-  storeDescription: z.string().min(2).max(100),
-  storeLogo: z.string().min(0),
+  name: z.string().min(2).max(50),
+  url: z.string().url().optional(),
+  description: z.string().min(2).max(100),
+  profileImage: z.string().min(0).optional(),
 });
 
 export function StoreForm() {
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -31,15 +33,13 @@ export function StoreForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const merchantInfo: MerchantInfo = {
-      storeName: values.storeName,
-      storeDescription: values.storeDescription,
-      storeUrl: values.storeUrl,
+      name: values.name,
+      description: values.description,
+      url: values.url,
+      profileImage: imageUrl,
     };
-    console.log(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`
-    );
     const response = await fetch(
-      `${process.env.SERVER_URL}${process.env.SAVE_MERCHANT_PATH}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`,
       {
         method: "POST",
         headers: {
@@ -50,15 +50,13 @@ export function StoreForm() {
         }),
       }
     );
-
-    console.log(response);
   }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="storeName"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Store Name</FormLabel>
@@ -71,7 +69,7 @@ export function StoreForm() {
         />
         <FormField
           control={form.control}
-          name="storeDescription"
+          name="description"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Store Description</FormLabel>
@@ -84,7 +82,7 @@ export function StoreForm() {
         />
         <FormField
           control={form.control}
-          name="storeUrl"
+          name="url"
           render={({ field }) => (
             <FormItem>
               <FormLabel>URL</FormLabel>
@@ -97,16 +95,15 @@ export function StoreForm() {
         />
         <FormField
           control={form.control}
-          name="storeLogo"
+          name="profileImage"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Store Name</FormLabel>
+              <FormLabel>Store Image</FormLabel>
               <FormControl>
                 <UploadButton
                   endpoint="imageUploader"
                   onClientUploadComplete={(res) => {
-                    // Do something with the response
-                    console.log("Files: ", res);
+                    setImageUrl(res[0].url);
                   }}
                   onUploadError={(error: Error) => {
                     // Do something with the error.
