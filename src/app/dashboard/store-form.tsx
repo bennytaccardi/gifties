@@ -40,7 +40,7 @@ export function StoreForm() {
       name: values.name,
       description: values.description,
       url: values.url,
-      profileImage: imageUrl,
+      profileImage: values.profileImage,
     };
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`,
@@ -108,7 +108,8 @@ export function StoreForm() {
                   <UploadButton
                     endpoint="imageUploader"
                     onClientUploadComplete={(res) => {
-                      setImageUrl(res[0].url);
+                      // setImageUrl(res[0].url);
+                      form.setValue("profileImage", res[0].url);
                     }}
                     onUploadError={(error: Error) => {
                       setError(error.message);
