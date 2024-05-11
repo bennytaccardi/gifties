@@ -18,6 +18,7 @@ import { AlertCircle } from "lucide-react";
 import { MerchantInfo } from "../dto/merchant";
 import { UploadButton } from "@/utils/uploadthing";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 
 export function StoreForm() {
   const [error, setError] = useState<string | undefined>(undefined);
+  const { push } = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,6 +55,12 @@ export function StoreForm() {
         }),
       }
     );
+    console.log(response);
+    if (response.status === 200) {
+      push("/success-page");
+    } else {
+      setError(response.statusText);
+    }
   }
   return (
     <div>
