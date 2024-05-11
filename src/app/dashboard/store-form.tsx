@@ -19,6 +19,8 @@ import { MerchantInfo } from "../dto/merchant";
 import { UploadButton } from "@/utils/uploadthing";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -124,6 +126,28 @@ export function StoreForm() {
                   />
                 </FormControl>
                 <FormMessage />
+                {form.getValues("profileImage") && (
+                  <Card className="w-auto">
+                    <CardHeader className="items-center w-auto h-auto">
+                      <Image
+                        src={form.getValues("profileImage")!}
+                        width={100}
+                        height={100}
+                        alt="Picture of the author"
+                      />
+                    </CardHeader>
+                    <CardFooter>
+                      <Button
+                        variant="outline"
+                        onClick={(res) => {
+                          form.setValue("profileImage", undefined);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                )}
               </FormItem>
             )}
           />
