@@ -31,11 +31,25 @@ const formSchema = z.object({
 
 export function StoreForm() {
   const [error, setError] = useState<string | undefined>(undefined);
+  const [fileKey, setFileKey] = useState<string | undefined>(undefined);
   const { push } = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+
+  const removePreview = (res: any) => {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/merchant/removeImage/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        imagePath: fileKey,
+      }),
+    });
+    form.setValue("profileImage", undefined);
+  };
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -119,6 +133,7 @@ export function StoreForm() {
                     onClientUploadComplete={(res) => {
                       // setImageUrl(res[0].url);
                       form.setValue("profileImage", res[0].url);
+                      setFileKey(res[0].key);
                     }}
                     onUploadError={(error: Error) => {
                       setError(error.message);
@@ -137,12 +152,7 @@ export function StoreForm() {
                       />
                     </CardHeader>
                     <CardFooter>
-                      <Button
-                        variant="outline"
-                        onClick={(res) => {
-                          form.setValue("profileImage", undefined);
-                        }}
-                      >
+                      <Button variant="outline" onClick={removePreview}>
                         Delete
                       </Button>
                     </CardFooter>
