@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "turso:login": "turso auth login",
+    "turso:logou": "turso auth logout"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.12",
@@ -32,7 +34,7 @@
     "react-hook-form": "^7.51.3",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^6.10.3",
+    "uploadthing": "^6.10.4",
     "zod": "^3.22.4"
   },
   "devDependencies": {

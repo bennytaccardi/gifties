@@ -17,6 +17,7 @@ export async function saveInfo(merchant: MerchantInfo): Promise<Merchant> {
     });
     return result;
   } catch (err) {
+    console.log(err);
     throw new Error(ErrorValues.INTERNAL_SERVER_ERROR);
   }
 }
