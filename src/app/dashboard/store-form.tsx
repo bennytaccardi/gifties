@@ -130,7 +130,7 @@ export function StoreForm() {
                 <FormControl>
                   <UploadButton
                     endpoint="imageUploader"
-                    onClientUploadComplete={(res) => {
+                    onClientUploadComplete={(res: any) => {
                       // setImageUrl(res[0].url);
                       form.setValue("profileImage", res[0].url);
                       setFileKey(res[0].key);

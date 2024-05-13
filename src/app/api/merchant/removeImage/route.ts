@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ data: "ok" });
   } catch (err) {
     const localError = err as Error;
-    console.error(localError);
     return NextResponse.json(
       { error: localError.message },
       { status: errorMapping(localError.message) }
