@@ -21,6 +21,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
+import { REMOVE_IMAGE_API, SAVE_MERCHANT_API } from "@/lib/constants";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -39,7 +40,7 @@ export function StoreForm() {
   });
 
   const removePreview = (res: any) => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/merchant/removeImage/`, {
+    fetch(`${REMOVE_IMAGE_API}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -59,18 +60,15 @@ export function StoreForm() {
       url: values.url,
       profileImage: values.profileImage,
     };
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}${process.env.NEXT_PUBLIC_SAVE_MERCHANT_PATH}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          merchant: merchantInfo,
-        }),
-      }
-    );
+    const response = await fetch(`${SAVE_MERCHANT_API}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        merchant: merchantInfo,
+      }),
+    });
     console.log(response);
     if (response.status === 200) {
       push("/success-page");
