@@ -24,7 +24,7 @@ import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { REMOVE_IMAGE_API } from "@/lib/constants";
 import { onSubmitAction } from "./actions/form-submit";
 import { formSchema } from "./form-schema";
-import { remove } from "./actions/preview-remover";
+import { removePreview } from "./actions/preview-remover";
 
 export function StoreForm() {
   const [error, setError] = useState<string | undefined>(undefined);
@@ -38,7 +38,7 @@ export function StoreForm() {
     resolver: zodResolver(formSchema),
   });
 
-  const removePreview = (res: any) => {
+  const onRemove = async (res: any) => {
     // fetch(`${REMOVE_IMAGE_API}`, {
     //   method: "POST",
     //   headers: {
@@ -49,7 +49,8 @@ export function StoreForm() {
     //   }),
     // });
     // form.setValue("profileImage", undefined);
-    remove();
+    const result = await removePreview(fileKey);
+    form.setValue("profileImage", undefined);
   };
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -140,7 +141,7 @@ export function StoreForm() {
                       />
                     </CardHeader>
                     <CardFooter>
-                      <Button variant="outline" onClick={removePreview}>
+                      <Button variant="outline" onClick={onRemove}>
                         Delete
                       </Button>
                     </CardFooter>
