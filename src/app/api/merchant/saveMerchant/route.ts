@@ -1,5 +1,5 @@
 import { saveInfo } from "@/app/services/merchant/merchant";
-import { errorMapping } from "@/lib/utils";
+import { errorMapping, ErrorValues } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

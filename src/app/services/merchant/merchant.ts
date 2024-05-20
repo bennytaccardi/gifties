@@ -3,6 +3,7 @@ import { Merchant } from "@/app/models/merchant";
 import { prisma } from "@/db/client";
 import { ErrorValues } from "@/lib/utils";
 import { currentUser } from "@clerk/nextjs/server";
+import { Prisma } from "@prisma/client";
 
 export async function saveInfo(merchant: MerchantInfo): Promise<Merchant> {
   const loggedUser = await currentUser();
@@ -17,7 +18,12 @@ export async function saveInfo(merchant: MerchantInfo): Promise<Merchant> {
     });
     return result;
   } catch (err) {
-    console.log(err);
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "SQLITE_CONSTRAINT"
+    ) {
+      throw new Error(ErrorValues.UNIQUE_CONSTRAINT_VIOLATION);
+    }
     throw new Error(ErrorValues.INTERNAL_SERVER_ERROR);
   }
 }

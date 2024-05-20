@@ -15,24 +15,23 @@ import {
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-import { MerchantInfo } from "../dto/merchant";
 import { UploadButton } from "@/utils/uploadthing";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useFormState } from "react-dom";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { REMOVE_IMAGE_API, SAVE_MERCHANT_API } from "@/lib/constants";
-
-const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  url: z.string().url().optional(),
-  description: z.string().min(2).max(100),
-  profileImage: z.string().min(0).optional(),
-});
+import { REMOVE_IMAGE_API } from "@/lib/constants";
+import { onSubmitAction } from "./actions/form-submit";
+import { formSchema } from "./form-schema";
+import { remove } from "./actions/preview-remover";
 
 export function StoreForm() {
   const [error, setError] = useState<string | undefined>(undefined);
   const [fileKey, setFileKey] = useState<string | undefined>(undefined);
+  const [state, formAction] = useFormState(onSubmitAction, {
+    message: "",
+  });
   const { push } = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,46 +39,37 @@ export function StoreForm() {
   });
 
   const removePreview = (res: any) => {
-    fetch(`${REMOVE_IMAGE_API}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        imagePath: fileKey,
-      }),
-    });
-    form.setValue("profileImage", undefined);
+    // fetch(`${REMOVE_IMAGE_API}`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     imagePath: fileKey,
+    //   }),
+    // });
+    // form.setValue("profileImage", undefined);
+    remove();
   };
 
-  // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const merchantInfo: MerchantInfo = {
-      name: values.name,
-      description: values.description,
-      url: values.url,
-      profileImage: values.profileImage,
-    };
-    const response = await fetch(`${SAVE_MERCHANT_API}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        merchant: merchantInfo,
-      }),
-    });
-    console.log(response);
-    if (response.status === 200) {
-      push("/success-page");
-    } else {
-      setError(response.statusText);
-    }
+  const formRef = useRef<HTMLFormElement>(null);
+  if (state.message && !state.issues) {
+    push("success-page");
   }
   return (
     <div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          ref={formRef}
+          onSubmit={(evt) => {
+            evt.preventDefault();
+            form.handleSubmit(() => {
+              formAction(new FormData(formRef.current!));
+            })(evt);
+          }}
+          action={formAction}
+          className="space-y-8"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -162,11 +152,11 @@ export function StoreForm() {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
-      {error && (
+      {state?.message !== "" && state.issues && (
         <Alert variant="destructive" className="mt-5">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{state?.message}</AlertDescription>
         </Alert>
       )}
     </div>
