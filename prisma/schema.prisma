@@ -1,8 +1,58 @@
 model Merchant {
-  id    String     @id
+  id               String      @id
   storeDescription String?
-  storeName String?
-  storeUrl String?
+  storeName        String?
+  storeUrl         String?
+  Customers        Customers[]
+}
+
+// Note: this is a private table that contains a mapping of user IDs to Stripe customer IDs
+model Customers {
+  merchantId    String          @id
+  merchant      Merchant        @relation(fields: [merchantId], references: [id])
+  stripeId      String
+  Subscriptions Subscriptions[]
+}
+
+model Products {
+  id          String   @id
+  active      Boolean
+  name        String
+  description String
+  image       String
+  Prices      Prices[]
+}
+
+model Prices {
+  id              String          @id
+  productId       String
+  product         Products        @relation(fields: [productId], references: [id])
+  active          Boolean
+  description     String
+  unitAmount      Int
+  currency        String
+  type            String
+  interval        String
+  intervalCount   Int
+  trialPeriodDays Int
+  Subscriptions   Subscriptions[]
+}
+
+model Subscriptions {
+  id                 String    @id
+  customerId         String
+  customer           Customers @relation(fields: [customerId], references: [merchantId])
+  status             String
+  priceId            String
+  price              Prices    @relation(fields: [priceId], references: [id])
+  quantity           Int
+  cancelAtPeriodEnd  Boolean
+  createdAt          DateTime  @default(now())
+  currentPeriodStart DateTime  @default(now())
+  currentPeriodEnd   DateTime  @default(now())
+  endedAt            DateTime? @default(now())
+  cancelAt           DateTime? @default(now())
+  canceledAt         DateTime? @default(now())
 }
 
 generator client {
