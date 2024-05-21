@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useFormState } from "react-dom";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { REMOVE_IMAGE_API } from "@/lib/constants";
 import { onSubmitAction } from "./actions/form-submit";
 import { formSchema } from "./form-schema";
 import { removePreview } from "./actions/preview-remover";
@@ -39,17 +38,7 @@ export function StoreForm() {
   });
 
   const onRemove = async (res: any) => {
-    // fetch(`${REMOVE_IMAGE_API}`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     imagePath: fileKey,
-    //   }),
-    // });
-    // form.setValue("profileImage", undefined);
-    const result = await removePreview(fileKey);
+    await removePreview(fileKey);
     form.setValue("profileImage", undefined);
   };
 

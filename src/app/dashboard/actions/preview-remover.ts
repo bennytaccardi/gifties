@@ -1,11 +1,12 @@
 "use server";
 
+import { REMOVE_IMAGE_UPLOADTHING } from "@/lib/constants";
 import { errorMapping } from "@/lib/utils";
 
 export async function removePreview(imagePath: string | undefined) {
   if (!imagePath) return {};
   try {
-    await fetch("https://uploadthing.com/api/deleteFile", {
+    await fetch(REMOVE_IMAGE_UPLOADTHING, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
