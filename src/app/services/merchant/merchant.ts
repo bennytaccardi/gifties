@@ -8,6 +8,13 @@ import { Prisma } from "@prisma/client";
 export async function saveInfo(merchant: MerchantInfo): Promise<Merchant> {
   const loggedUser = await currentUser();
 
+  console.log("Test errore");
+  const result = await prisma.merchant.findUnique({
+    where: {
+      id: "w",
+    },
+  });
+  console.log(result);
   if (!loggedUser) throw new Error(ErrorValues.UNHAUTHORIZED);
   try {
     const result: Merchant = await prisma.merchant.create({
