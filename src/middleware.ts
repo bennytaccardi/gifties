@@ -4,7 +4,7 @@ import { authMiddleware } from "@clerk/nextjs";
 // for more information about configuring your Middleware
 export default authMiddleware({
   // Allow signed out users to access the specified routes:
-  publicRoutes: ["/", "/api/merchant/saveMerchant", "/api/uploadthing"],
+  publicRoutes: ["/", "/dashboard", "/success-page", "/api/uploadthing"],
 });
 
 export const config = {
