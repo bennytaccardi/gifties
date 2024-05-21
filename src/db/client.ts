@@ -4,7 +4,7 @@ import { PrismaLibSQL } from "@prisma/adapter-libsql";
 
 const prismaClientSingleton = () => {
   const libsql = createClient({
-    url: "libsql://gifties-bennytaccardi.turso.io",
+    url: "libsql://gifties-gifties.turso.io",
     authToken: process.env.TURSO_AUTH!,
   });
 

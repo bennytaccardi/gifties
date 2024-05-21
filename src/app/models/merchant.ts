@@ -1,6 +1,7 @@
 export interface Merchant {
   id: string;
-  storeName: string | null;
-  storeDescription: string | null;
-  storeUrl: string | null;
+  name: string | null;
+  description: string | null;
+  url: string | null;
+  profileImage: string | null;
 }
