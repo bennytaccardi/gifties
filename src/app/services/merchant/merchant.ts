@@ -24,6 +24,8 @@ export async function saveInfo(merchant: MerchantInfo): Promise<Merchant> {
     ) {
       throw new Error(ErrorValues.UNIQUE_CONSTRAINT_VIOLATION);
     }
+    console.log("Sto andando qui in errore");
+    console.log(err);
     throw new Error(ErrorValues.INTERNAL_SERVER_ERROR);
   }
 }
