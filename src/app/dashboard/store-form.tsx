@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -24,6 +24,7 @@ import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { onSubmitAction } from "./actions/form-submit";
 import { formSchema } from "./form-schema";
 import { removePreview } from "./actions/preview-remover";
+import { Tags } from "@/components/ui/tags";
 
 export function StoreForm() {
   const [error, setError] = useState<string | undefined>(undefined);
@@ -94,6 +95,22 @@ export function StoreForm() {
                 <FormLabel>URL</FormLabel>
                 <FormControl>
                   <Input type="url" placeholder="https://acme.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Controller
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <Tags
+                    selectedTags={field.value || []}
+                    onTagsChange={field.onChange}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

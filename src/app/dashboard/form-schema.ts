@@ -16,5 +16,11 @@ export const formSchema = z.object({
     })
     .trim()
     .max(100),
+  tags: z.array(
+    z.object({
+      value: z.string(),
+      label: z.string(),
+    })
+  ),
   profileImage: z.string().min(0).trim().optional(),
 });
