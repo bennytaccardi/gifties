@@ -24,7 +24,7 @@ import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { onSubmitAction } from "./actions/form-submit";
 import { formSchema } from "./form-schema";
 import { removePreview } from "./actions/preview-remover";
-import { Tags } from "@/components/ui/tags";
+import { Tag, Tags } from "@/components/ui/tags";
 
 export function StoreForm() {
   const [error, setError] = useState<string | undefined>(undefined);
@@ -36,6 +36,9 @@ export function StoreForm() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      tags: [],
+    },
   });
 
   const onRemove = async (res: any) => {
@@ -54,8 +57,15 @@ export function StoreForm() {
           ref={formRef}
           onSubmit={(evt) => {
             evt.preventDefault();
-            form.handleSubmit(() => {
-              formAction(new FormData(formRef.current!));
+            form.handleSubmit(async () => {
+              const formData = new FormData(formRef.current!);
+
+              const tags = form.getValues("tags");
+              if (tags && Array.isArray(tags)) {
+                formData.set("tags", JSON.stringify(tags)); // Ensure tags are stringified
+              }
+
+              await formAction(formData);
             })(evt);
           }}
           action={formAction}
@@ -100,7 +110,7 @@ export function StoreForm() {
               </FormItem>
             )}
           />
-          <Controller
+          <FormField
             control={form.control}
             name="tags"
             render={({ field }) => (
@@ -108,8 +118,18 @@ export function StoreForm() {
                 <FormLabel>Tags</FormLabel>
                 <FormControl>
                   <Tags
-                    selectedTags={field.value || []}
-                    onTagsChange={field.onChange}
+                    currentTags={form.getValues("tags")}
+                    onTagsChange={(value) => {
+                      console.log("Sono qui");
+                      console.log(field);
+                      console.log(value);
+                      form.setValue("tags", value);
+                    }}
+                    frameworks={[
+                      { value: "react", label: "React" },
+                      { value: "vue", label: "Vue" },
+                      // Add more frameworks as needed
+                    ]}
                   />
                 </FormControl>
                 <FormMessage />

@@ -16,11 +16,13 @@ export const formSchema = z.object({
     })
     .trim()
     .max(100),
-  tags: z.array(
-    z.object({
-      value: z.string(),
-      label: z.string(),
-    })
-  ),
+  tags: z
+    .array(
+      z.object({
+        value: z.string(),
+        label: z.string(),
+      })
+    )
+    .min(1, "At least one tag is required"),
   profileImage: z.string().min(0).trim().optional(),
 });
