@@ -17,7 +17,9 @@ import {
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { CommandList } from "cmdk";
-import { cn } from "@/lib/utils";
+import { useFormContext } from "react-hook-form";
+import { formSchema } from "@/app/dashboard/form-schema";
+import { z } from "zod";
 
 let frameworks = [
   { value: "bricolage", label: "bricolage" },
@@ -32,80 +34,79 @@ export interface Tag {
   label: string;
 }
 
-interface TagsProps {
-  currentTags: Tag[];
-  onTagsChange: (value: Tag[]) => void;
-  frameworks: Tag[];
-}
+export function Tags() {
+  const [open, setOpen] = React.useState(false);
+  const { getValues, setValue, watch } =
+    useFormContext<z.infer<typeof formSchema>>();
+  const currentTags = getValues("tags");
+  const tags = watch("tags");
 
-const Tags = React.forwardRef<HTMLDivElement, TagsProps>(
-  ({ currentTags, onTagsChange, frameworks }, ref) => {
-    const [open, setOpen] = React.useState(false);
-
-    return (
-      <div ref={ref} className="flex flex-col space-y-2">
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={open}
-              className="w-[200px] justify-between"
+  return (
+    <div className="flex flex-col space-y-2">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-[200px] justify-between"
+          >
+            {"Select tag..."}
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[200px] p-0">
+          <Command>
+            <CommandInput placeholder="Search tag..." />
+            <CommandList>
+              <CommandEmpty>No framework found.</CommandEmpty>
+              <CommandGroup>
+                {frameworks.map((framework) => (
+                  <CommandItem
+                    key={framework.value}
+                    value={framework.value}
+                    onSelect={(currentValue) => {
+                      const selectedFramework = frameworks.find(
+                        (elem) => elem.value === currentValue
+                      );
+                      if (selectedFramework) {
+                        setValue("tags", [...currentTags, selectedFramework]);
+                      }
+                      setOpen(false);
+                    }}
+                  >
+                    {framework.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+      <div className="space-x-2 space-y-2">
+        {currentTags &&
+          currentTags.map((tag) => (
+            <Badge
+              key={tag!.value}
+              className="w-min truncate"
+              onClick={() => {
+                const newTags = currentTags.filter(
+                  (selectedTag) => selectedTag!.value !== tag!.value
+                );
+                setValue("tags", newTags);
+              }}
             >
-              {"Select tag..."}
-              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-[200px] p-0">
-            <Command>
-              <CommandInput placeholder="Search tag..." />
-              <CommandList>
-                <CommandEmpty>No framework found.</CommandEmpty>
-                <CommandGroup>
-                  {frameworks.map((framework) => (
-                    <CommandItem
-                      key={framework.value}
-                      value={framework.value}
-                      onSelect={(currentValue) => {
-                        const selectedFramework = frameworks.find(
-                          (elem) => elem.value === currentValue
-                        );
-                        if (selectedFramework) {
-                          onTagsChange([...currentTags, selectedFramework]);
-                        }
-                        setOpen(false);
-                      }}
-                    >
-                      {framework.label}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
-        <div className="space-x-2 space-y-2">
-          {currentTags &&
-            currentTags.map((tag) => (
-              <Badge
-                key={tag!.value}
-                className="w-min truncate"
-                onClick={() => {
-                  const newTags = currentTags.filter(
-                    (selectedTag) => selectedTag!.value !== tag!.value
-                  );
-                  onTagsChange(newTags);
-                }}
-              >
-                {tag!.label}
-              </Badge>
-            ))}
-        </div>
+              {tag!.label}
+            </Badge>
+          ))}
       </div>
-    );
-  }
-);
-
-Tags.displayName = "Tags";
-
-export { Tags };
+      <input
+        type="select"
+        name="tags"
+        style={{ display: "none" }}
+        multiple
+        value={[...tags?.map((item) => item.value)]}
+      />
+    </div>
+  );
+}
