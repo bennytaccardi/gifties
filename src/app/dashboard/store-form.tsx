@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -24,8 +24,8 @@ import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { onSubmitAction } from "./actions/form-submit";
 import { formSchema } from "./form-schema";
 import { removePreview } from "./actions/preview-remover";
-import { Tag, Tags } from "@/components/ui/tags";
-import { FormProvider, useFormContext } from "react-hook-form";
+import { Tags } from "@/components/ui/tags";
+import { FormProvider } from "react-hook-form";
 
 export function StoreForm() {
   const [error, setError] = useState<string | undefined>(undefined);
@@ -37,9 +37,6 @@ export function StoreForm() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      tags: [],
-    },
   });
 
   const onRemove = async (res: any) => {
@@ -56,11 +53,7 @@ export function StoreForm() {
     <div>
       <FormProvider {...form}>
         <Form {...form}>
-          <form
-            ref={formRef}
-            action={formAction}
-            className="space-y-8"
-          >
+          <form ref={formRef} action={formAction} className="space-y-8">
             <FormField
               control={form.control}
               name="name"
@@ -111,7 +104,7 @@ export function StoreForm() {
                 <FormItem>
                   <FormLabel>Tags</FormLabel>
                   <FormControl>
-                    <Tags/>
+                    <Tags />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -127,7 +120,6 @@ export function StoreForm() {
                     <UploadButton
                       endpoint="imageUploader"
                       onClientUploadComplete={(res: any) => {
-                        // setImageUrl(res[0].url);
                         form.setValue("profileImage", res[0].url);
                         setFileKey(res[0].key);
                       }}
@@ -136,6 +128,12 @@ export function StoreForm() {
                       }}
                     />
                   </FormControl>
+                  <input
+                    type="text"
+                    style={{ display: "none" }}
+                    name="profileImage"
+                    value={form.getValues("profileImage")}
+                  ></input>
                   <FormMessage />
                   {form.getValues("profileImage") && (
                     <Card className="w-auto">

@@ -3,4 +3,5 @@ export interface MerchantInfo {
   description?: string;
   url?: string;
   profileImage?: string;
+  tags?: string;
 }

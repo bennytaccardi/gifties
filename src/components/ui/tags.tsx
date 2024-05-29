@@ -21,7 +21,7 @@ import { useFormContext } from "react-hook-form";
 import { formSchema } from "@/app/dashboard/form-schema";
 import { z } from "zod";
 
-let frameworks = [
+let lookupTags = [
   { value: "bricolage", label: "bricolage" },
   { value: "hobbistica", label: "hobbistica" },
   { value: "dadday", label: "festa del papà" },
@@ -61,16 +61,23 @@ export function Tags() {
             <CommandList>
               <CommandEmpty>No framework found.</CommandEmpty>
               <CommandGroup>
-                {frameworks.map((framework) => (
+                {lookupTags.map((framework) => (
                   <CommandItem
                     key={framework.value}
                     value={framework.value}
                     onSelect={(currentValue) => {
-                      const selectedFramework = frameworks.find(
+                      const selectedTag = lookupTags.find(
                         (elem) => elem.value === currentValue
                       );
-                      if (selectedFramework) {
-                        setValue("tags", [...currentTags, selectedFramework]);
+                      if (selectedTag) {
+                        setValue(
+                          "tags",
+                          currentTags
+                            ? [...currentTags.split(","), selectedTag.value]
+                                .map((tag) => tag)
+                                .join(",")
+                            : selectedTag.value
+                        );
                       }
                       setOpen(false);
                     }}
@@ -85,18 +92,21 @@ export function Tags() {
       </Popover>
       <div className="space-x-2 space-y-2">
         {currentTags &&
-          currentTags.map((tag) => (
+          currentTags.split(",").map((tag) => (
             <Badge
-              key={tag!.value}
+              key={tag!}
               className="w-min truncate"
               onClick={() => {
-                const newTags = currentTags.filter(
-                  (selectedTag) => selectedTag!.value !== tag!.value
-                );
-                setValue("tags", newTags);
+                const newTags = currentTags
+                  .split(",")
+                  .filter((selectedTag) => selectedTag! !== tag!);
+                setValue("tags", newTags.map((tag) => tag).join(","));
               }}
             >
-              {tag!.label}
+              {
+                lookupTags.filter((lookupTag) => lookupTag.value === tag)[0]
+                  .label
+              }
             </Badge>
           ))}
       </div>
@@ -105,7 +115,7 @@ export function Tags() {
         name="tags"
         style={{ display: "none" }}
         multiple
-        value={[...tags?.map((item) => item.value)]}
+        value={tags?.split(",").map((item) => item)}
       />
     </div>
   );

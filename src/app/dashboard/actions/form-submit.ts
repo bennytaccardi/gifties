@@ -14,8 +14,6 @@ export async function onSubmitAction(
   prevState: FormState,
   data: FormData
 ): Promise<FormState> {
-  console.log(prevState);
-  console.log(data);
   const formData = Object.fromEntries(data);
   const parsed = formSchema.safeParse(formData);
 
@@ -39,6 +37,7 @@ export async function onSubmitAction(
         ? formData.profileImage.toString()
         : undefined,
       url: formData.url ? formData.url.toString() : undefined,
+      tags: formData.tags ? formData.tags.toString() : undefined,
     };
     await saveInfo(merchant);
 

@@ -4,4 +4,5 @@ export interface Merchant {
   description: string | null;
   url: string | null;
   profileImage: string | null;
+  tags: string | null;
 }

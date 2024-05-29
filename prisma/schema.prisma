@@ -4,6 +4,7 @@ model Merchant {
   name         String?
   url          String?
   profileImage String?
+  tags         String?
 }
 
 generator client {
