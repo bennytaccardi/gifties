@@ -14,6 +14,9 @@ dependencies:
   '@libsql/client':
     specifier: ^0.6.0
     version: 0.6.0
+  '@orama/orama':
+    specifier: ^2.0.19
+    version: 2.0.19
   '@prisma/adapter-libsql':
     specifier: ^5.12.1
     version: 5.12.1(@libsql/client@0.6.0)
@@ -81,7 +84,7 @@ dependencies:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.4.3)
   uploadthing:
-    specifier: ^6.10.4
+    specifier: ^6.10.3
     version: 6.10.4(next@14.1.4)(tailwindcss@3.4.3)
   zod:
     specifier: ^3.22.4
@@ -574,6 +577,11 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
+
+  /@orama/orama@2.0.19:
+    resolution: {integrity: sha512-9nlF5iYUghewRt2TDmAJO5TN4hYFPhql4d2ZAdJYJtGSIi2BZjMNQIqQ874w0q/rur67wp0AWLb020EakEN0aA==}
+    engines: {node: '>= 16.0.0'}
+    dev: false
 
   /@peculiar/asn1-schema@2.3.8:
     resolution: {integrity: sha512-ULB1XqHKx1WBU/tTFIA+uARuRoBVZ4pNdOA878RDrRbBfBGcSzi5HBkdScC6ZbHn8z7L8gmKCgPC1LHRrP46tA==}
