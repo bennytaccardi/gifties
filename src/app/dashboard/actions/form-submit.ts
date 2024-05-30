@@ -37,6 +37,7 @@ export async function onSubmitAction(
         ? formData.profileImage.toString()
         : undefined,
       url: formData.url ? formData.url.toString() : undefined,
+      tags: formData.tags ? formData.tags.toString() : undefined,
     };
     await saveInfo(merchant);
 

@@ -16,5 +16,6 @@ export const formSchema = z.object({
     })
     .trim()
     .max(100),
+  tags: z.string().min(1, "At least one tag is required"),
   profileImage: z.string().min(0).trim().optional(),
 });

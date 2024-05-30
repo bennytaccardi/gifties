@@ -1,0 +1,2 @@
+ALTER TABLE "Merchant" DROP COLUMN "tags";
+ALTER TABLE "Merchant" ADD COLUMN "tags" TEXT;
