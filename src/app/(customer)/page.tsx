@@ -57,7 +57,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-10">
+    <main className="flex min-h-screen flex-col items-center p-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 ...">
       <Search find={find} />
       {searchedMerchants.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-12">
