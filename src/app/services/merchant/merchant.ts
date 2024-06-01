@@ -40,3 +40,10 @@ export async function saveImage(imageUrl: string): Promise<Merchant> {
   });
   return result;
 }
+
+export async function fetchAllMerchants(): Promise<Merchant[]> {
+  const loggedUser = await currentUser();
+  if (!loggedUser) throw new Error("Unauthorized");
+  const result: Merchant[] = await prisma.merchant.findMany();
+  return result;
+}

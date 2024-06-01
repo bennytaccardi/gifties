@@ -20,7 +20,12 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useFormState } from "react-dom";
-import { Card, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { onSubmitAction } from "./actions/form-submit";
 import { formSchema } from "./form-schema";
 import { removePreview } from "./actions/preview-remover";
@@ -145,11 +150,11 @@ export function StoreForm() {
                           alt="Picture of the author"
                         />
                       </CardHeader>
-                      <CardFooter>
+                      <CardDescription>
                         <Button variant="outline" onClick={onRemove}>
                           Delete
                         </Button>
-                      </CardFooter>
+                      </CardDescription>
                     </Card>
                   )}
                 </FormItem>
